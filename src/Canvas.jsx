@@ -4,7 +4,6 @@ import React, { useRef, useState, useEffect } from 'react'
 const Canvas = () => {
     const canvasRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
-
     // This runs once when the component mounts
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -32,6 +31,7 @@ const Canvas = () => {
         if(!isDrawing)return;
         const ctx= canvasRef.current.getContext('2d');
         ctx.lineTo(nativeEvent.offsetX, nativeEvent.offsetY);
+        ctx.strokeStyle= color;
         ctx.stroke();
     }
 
@@ -44,15 +44,19 @@ const Canvas = () => {
         setIsDrawing(false);
     }
 
+    const [color, setColor]= useState("black");
     return (
-        <canvas
-            ref={canvasRef}
-            onMouseDown={startDrawing}
-            onMouseMove={draw}
-            onMouseUp={stopDrawing}
-            // This ensures the cursor looks like a crosshair
-            style={{ cursor: 'crosshair', display: 'block' }} 
-        />
+        <>
+            <input type="color" onChange={(e)=>setColor(e.target.value)}/>
+            <canvas
+                ref={canvasRef}
+                onMouseDown={startDrawing}
+                onMouseMove={draw}
+                onMouseUp={stopDrawing}
+                // This ensures the cursor looks like a crosshair
+                style={{ cursor: 'crosshair', display: 'block' }} 
+            />
+        </>
     )
 }
 
